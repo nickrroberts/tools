@@ -69,9 +69,15 @@ fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, null, 2));
 execSync("npm install --save-dev webpack webpack-cli style-loader css-loader html-loader html-webpack-plugin webpack-dev-server jest babel-loader eslint", { cwd: projectPath, stdio: 'inherit' });
 
 // Create webpack configuration files
-const webpackCommonContent = `const path = require('path');
+const webpackCommonContent = `import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-module.exports = {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+import path from 'path';
+
+export default {
   entry: './src/index.js',
   output: {
     filename: 'bundle.js',
@@ -87,26 +93,26 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/i,
+        test: /.css$/i,
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.html$/i,
+        test: /.html$/i,
         loader: "html-loader",
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /.(png|svg|jpg|jpeg|gif)$/i,
         type: "asset/resource",
       }
     ],
   },
 };`;
 
-const webpackDevContent = `const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpackDevContent = `import { merge } from 'webpack-merge';
+import common from './webpack.common.js';
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
-module.exports = merge(common, {
+const config = merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
@@ -121,14 +127,16 @@ module.exports = merge(common, {
       filename: "index.html",
     }),
   ],
-});`;
+});
 
-const webpackProdContent = `const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
-const TerserPlugin = require('terser-webpack-plugin');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+export default config;`;
 
-module.exports = merge(common, {
+const webpackProdContent = `import { merge } from 'webpack-merge';
+import common from './webpack.common.js';
+import TerserPlugin from 'terser-webpack-plugin';
+import HtmlWebpackPlugin from "html-webpack-plugin";
+
+export default merge(common, {
   mode: 'production',
   optimization: {
     minimize: true,
