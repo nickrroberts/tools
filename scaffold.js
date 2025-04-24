@@ -12,7 +12,7 @@ if (!projectName) {
 const projectPath = path.join(process.cwd(), projectName);
 const srcPath = path.join(projectPath, 'src');
 const testPath = path.join(projectPath, 'test');
-const mocksPath = path.join(projectPath, 'test/__mocks__')
+const mocksPath = path.join(projectPath, '__mocks__')
 const distPath = path.join(projectPath, 'dist');
 
 // Create the project, src, test, and dist folders
