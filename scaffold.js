@@ -178,7 +178,7 @@ export default {
     transform: {}, // required to silence transform warnings when using ESM without Babel
     testMatch: ['**/test/**/*.js'],
     moduleNameMapper: {
-      "\\.(png|jpg|jpeg|svg)$": "<rootDir>/test/__mocks__/fileMock.js"
+      "\\.(png|jpg|jpeg|svg)$": "<rootDir>/__mocks__/fileMock.js"
     }
   };
 `
