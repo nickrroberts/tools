@@ -11,11 +11,13 @@ if (!projectName) {
 
 const projectPath = path.join(process.cwd(), projectName);
 const srcPath = path.join(projectPath, 'src');
+const testPath = path.join(projectPath, 'test');
 const distPath = path.join(projectPath, 'dist');
 
 // Create the project, src, and dist folders
 fs.mkdirSync(projectPath, { recursive: true });
 fs.mkdirSync(srcPath, { recursive: true });
+fs.mkdirSync(testPath, { recursive: true });
 fs.mkdirSync(distPath, { recursive: true });
 
 // Define file contents
@@ -36,14 +38,20 @@ const cssContent = `body {
 }`;
 
 const jsContent = `
-import './style.css'
+import './style.css';
 console.log("Hello from ${projectName}!");
 `;
+
+// Jest mocks file
+const mockContent = `export default "test-file-stub";`
 
 // Write files to src directory
 fs.writeFileSync(path.join(srcPath, "template.html"), htmlContent);
 fs.writeFileSync(path.join(srcPath, "style.css"), cssContent);
 fs.writeFileSync(path.join(srcPath, "index.js"), jsContent);
+
+// Write mock to test dir
+fs.writeFileSync(path.join(testPath, "fileMock.js"), mockContent);
 
 // Initialize Git repository
 execSync("git init", { cwd: projectPath, stdio: 'inherit' });
@@ -166,6 +174,10 @@ const jestConfig = `
 export default {
     testEnvironment: 'node',
     transform: {}, // required to silence transform warnings when using ESM without Babel
+    testMatch: ['**/test/**/*.js'],
+    moduleNameMapper: {
+      "\\.(png|jpg|jpeg|svg)$": "<rootDir>/test/__mocks__/fileMock.js"
+    }
   };
 `
 
