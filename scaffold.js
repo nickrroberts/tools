@@ -25,7 +25,6 @@ const htmlContent = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${projectName}</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -36,7 +35,10 @@ const cssContent = `body {
     font-family: Arial, sans-serif;
 }`;
 
-const jsContent = `console.log("Hello from ${projectName}!");`;
+const jsContent = `
+import './style.css'
+console.log("Hello from ${projectName}!");
+`;
 
 // Write files to src directory
 fs.writeFileSync(path.join(srcPath, "template.html"), htmlContent);
@@ -165,7 +167,6 @@ export default {
     testEnvironment: 'node',
     transform: {}, // required to silence transform warnings when using ESM without Babel
   };
-
 `
 
 fs.writeFileSync(path.join(projectPath, "webpack.common.js"), webpackCommonContent);
