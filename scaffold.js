@@ -12,12 +12,14 @@ if (!projectName) {
 const projectPath = path.join(process.cwd(), projectName);
 const srcPath = path.join(projectPath, 'src');
 const testPath = path.join(projectPath, 'test');
+const mocksPath = path.join(projectPath, 'test/__mocks__')
 const distPath = path.join(projectPath, 'dist');
 
-// Create the project, src, and dist folders
+// Create the project, src, test, and dist folders
 fs.mkdirSync(projectPath, { recursive: true });
 fs.mkdirSync(srcPath, { recursive: true });
 fs.mkdirSync(testPath, { recursive: true });
+fs.mkdirSync(mocksPath, { recursive: true });
 fs.mkdirSync(distPath, { recursive: true });
 
 // Define file contents
@@ -51,7 +53,7 @@ fs.writeFileSync(path.join(srcPath, "style.css"), cssContent);
 fs.writeFileSync(path.join(srcPath, "index.js"), jsContent);
 
 // Write mock to test dir
-fs.writeFileSync(path.join(testPath, "fileMock.js"), mockContent);
+fs.writeFileSync(path.join(mocksPath, "fileMock.js"), mockContent);
 
 // Initialize Git repository
 execSync("git init", { cwd: projectPath, stdio: 'inherit' });
